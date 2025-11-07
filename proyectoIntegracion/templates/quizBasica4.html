@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz 1</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+        body {
+            background-image: url("{% static 'imagenes/fondo.jpg' %}");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;
+            color: #FFA500; 
+            flex: 1; 
+        }
+
+        .navbar {
+            background-color: black; 
+            color: #FFA500; 
+            padding: 1em 0;
+        }
+
+        .navbar a {
+            color: #FFA500;
+            text-decoration: none;
+            margin: 0 1em;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: white;
+        }
+
+        #container_quiz {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            max-width: 1000px;
+            background-color: rgba(0, 0, 0, 0.85); 
+            border-radius: 10px; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); 
+            padding: 2em;
+            margin: 2em auto;
+            color: #FFA500;
+        }
+
+        .quiz-content {
+            font-size: 1.2em;
+            line-height: 1.6; 
+            margin-bottom: 2em;
+        }
+
+        .quiz-questions {
+            font-weight: bold;
+            background-color: #333;
+            padding: 1.5em;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+            max-width: 800px; 
+            margin: 0 auto;
+        }
+
+        .question {
+            margin-top: 1em;
+            padding-bottom: 1em; 
+            border-bottom: 1px solid #555; 
+        }
+
+        .question p {
+            font-size: 1.1em;
+            color: #FFA500;
+            font-weight: 600;
+            margin-bottom: 0.5em;
+            line-height: 1.4;
+        }
+
+        .question input[type="radio"] {
+            margin-right: 0.5em;
+            cursor: pointer;
+        }
+
+        .question label {
+            font-size: 1em;
+            display: flex; 
+            align-items: center;
+            padding: 0.5em;
+            cursor: pointer; 
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 5px; 
+            color: #FFA500;
+            background-color: #333;
+        }
+
+        .question input[type="radio"]:hover + label {
+            background-color: #555;
+        }
+
+        .question input[type="radio"]:checked + label {
+            background-color: #FFA500;
+            color: black;
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 2em;
+            padding: 1em;
+            border-radius: 8px;
+            font-size: 1.2em;
+        }
+
+        .feedback img {
+            margin-top: 1em;
+            width: 100px;
+        }
+
+
+        footer {
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            background-color: #000000;
+            color: #FFA500;
+            padding: 1em;
+        }
+
+        footer p {
+            margin: 0;
+            padding: 0.5em 0;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-questions {
+                padding: 1em;
+            }
+
+            .quiz-content,
+            .quiz-questions {
+                width: 100%; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Texto sin Drama</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'listaQuiz' %}">Ejercicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'listaQuiz' %}">Quizzes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
+                    
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'perfil' %}">Perfil</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Cerrar Sesión</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'ingresoUsuarios' %}">Registrarse</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="container_quiz" class="container mt-5">
+        <h5>Lee atentamente el texto y responde las preguntas</h5><br><br><br>
+        <p>Lía y Tomás llegaron a un bosque y vieron una cueva misteriosa. Cuando entraron, un grupo de murciélagos voló sobre ellos. Tuvieron que agacharse para no ser golpeados. Después, cruzaron la cueva y encontraron un río que los llevaba a un templo. Como no podían cruzarlo caminando, buscaron una rama y la usaron como puente.<p>
+        <p>Al llegar al templo, vieron una estatua antigua con un diamante en su mano. Cuando se acercaron, Lía notó un círculo de piedras en el suelo. Al tocarlas, el suelo comenzó a temblar. Rápidamente, salieron del templo para evitar la trampa que estaba por liberarse. Cuando el temblor cesó, un guardián apareció y les felicitó por recuperar el diamante, pero les dijo que aún quedaba mucho por descubrir.</p><br>
+            
+        <p>Más adelante, llegaron a un puente colgante viejo que cruzaba un acantilado. El puente se tambaleaba, pero corrieron rápidamente y lograron saltar al otro lado antes de que se cayera. Al llegar al otro lado, vieron un bosque con mucha niebla. Se perdieron, pero Tomás encontró unas huellas en el suelo y las siguieron hasta encontrar el camino.</p><br>
+            
+        <p>Después de un largo recorrido, vieron una torre custodiada por un dragón dormido. Mientras se acercaban, Lía pisó una rama, lo que despertó al dragón. Rápidamente, se escondieron dentro de una armadura de caballero cercana. El dragón los buscó, pero al no encontrarlos, volvió a dormir. Aprovechando el momento, encontraron una salida secreta y escaparon.</p><br>
+            
+        <p>Mientras huían, Lía tropezó y cayó en un pozo profundo, llevando a Tomás con ella. En el fondo, encontraron una caverna iluminada por luces extrañas y una puerta custodiada por una criatura telepática. La criatura les dijo que solo podrían pasar si demostraban lo que habían aprendido en su viaje. Lía y Tomás le explicaron que habían usado su valentía, ingenio y trabajo en equipo para superar los desafíos. La criatura, convencida, les permitió continuar su aventura y les mostró una puerta mágica.</p><br>
+            
+        <p>Al atravesar la puerta, llegaron a un desierto iluminado por dos lunas brillantes. Vieron un oasis en el horizonte y encontraron a un anciano sabio que les ofreció una brújula mágica, pero solo si respondían un acertijo. El anciano les preguntó: "¿Qué es algo que, aunque lo compartas, nunca se divide?" Lía pensó un momento y respondió: "El conocimiento". El anciano, satisfecho, les dio la brújula y les advirtió que no se desviasen de su camino.</p><br>
+            
+        <p>Siguiendo la brújula, llegaron a un castillo flotante rodeado de lava. En la entrada, encontraron una inscripción que decía: "Solo aquellos que confían en su compañero cruzarán sin caer". Tomás tomó la mano de Lía y, juntos, cruzaron el puente invisible que apareció bajo sus pies.</p><br>
+            
+        <p>Dentro del castillo, vieron un reloj gigante que marcaba la cuenta regresiva. En el pedestal frente a ellos, había un cristal dorado. Cuando se acercaron, el reloj comenzó a moverse más rápido. Tomás, con calma, sugirió que se concentraran en lo que habían aprendido. Al hacerlo, el reloj comenzó a ir más lento, y el cristal dorado cayó suavemente en las manos de Lía.</p><br>
+            
+        <p>Al tocarlo, una puerta mágica se abrió. Lía y Tomás cruzaron la puerta, adentrándose en un mundo desconocido. Al otro lado, no había más desafíos ni criaturas que enfrentar, solo un vasto paisaje lleno de oportunidades. Ellos sabían que su aventura había llegado a su fin, pero también que siempre serían buenos hermanos, listos para nuevas aventuras que la vida les traerá.</p><br>
+
+        <h5 style="color: #FFA500;">Preguntas:</h5>
+        <div class="quiz-questions mt-4">
+            <h7 style="color: #FFA500;">Cada vez que respondas correctamente, aparecerá una nueva pregunta.</h7>
+            <div class="question mt-3">
+                <p>1) ¿Qué encontraron Lía y Tomás al entrar en la cueva?</p>
+                <div>
+                    <input type="radio" id="q1a" name="q1" value="a">
+                    <label for="q1a">a) Un río.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q1b" name="q1" value="b">
+                    <label for="q1b">b) Un grupo de murciélagos.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q1c" name="q1" value="c">
+                    <label for="q1c">c) Un dragón.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q1d" name="q1" value="d">
+                    <label for="q1d">d) Un río de lava.</label>
+                </div>
+            </div>
+            
+            <div class="question mt-3">
+                <p>2) ¿Cómo cruzaron Lía y Tomás el río para llegar al templo?</p>
+                <div>
+                    <input type="radio" id="q2a" name="q2" value="a">
+                    <label for="q2a">a) Nadaron</label>
+                </div>
+                <div>
+                    <input type="radio" id="q2b" name="q2" value="b">
+                    <label for="q2b">b) Usaron una rama como puente.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q2c" name="q2" value="c">
+                    <label for="q2c">c) Volaron.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q2d" name="q2" value="d">
+                    <label for="q2d">d) Usaron una balsa.</label>
+                </div>
+            </div>
+            
+            <div class="question mt-3">
+                <p>3) ¿Qué ocurrió cuando Lía tocó las piedras en el suelo del templo?</p>
+                <div>
+                    <input type="radio" id="q3a" name="q3" value="a">
+                    <label for="q3a">a) La puerta se abrió.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q3b" name="q3" value="b">
+                    <label for="q3b">b) El suelo comenzó a temblar.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q3c" name="q3" value="c">
+                    <label for="q3c">c) Apareció un dragón.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q3d" name="q3" value="d">
+                    <label for="q3d">d) La estatua se movió.</label>
+                </div>
+            </div>
+            
+            <div class="question mt-3">
+                <p>4) ¿Cómo lograron cruzar el puente colgante sin caer?</p>
+                <div>
+                    <input type="radio" id="q4a" name="q4" value="a">
+                    <label for="q4a">a) Corrieron rápidamente al otro lado.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q4b" name="q4" value="b">
+                    <label for="q4b">b) Usaron una cuerda.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q4c" name="q4" value="c">
+                    <label for="q4c">c) Usaron una rama como puente.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q4d" name="q4" value="d">
+                    <label for="q4d">d) Corrieron muy rápido.</label>
+                </div>
+            </div>
+            
+            <div class="question mt-3">
+                <p>5) ¿Qué hizo Lía que despertó al dragón?</p>
+                <div>
+                    <input type="radio" id="q5a" name="q5" value="a">
+                    <label for="q5a">a) Llamó al dragón.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q5b" name="q5" value="b">
+                    <label for="q5b">b) Tocó la estatua del dragón.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q5c" name="q5" value="c">
+                    <label for="q5c">c) Pisó una rama.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q5d" name="q5" value="d">
+                    <label for="q5d">d) Le habló en voz alta.</label>
+                </div>
+            </div>
+
+            <div class="question mt-3">
+                <p>6) ¿Qué tuvieron que demostrar Lía y Tomás a la criatura telepática?</p>
+                <div>
+                    <input type="radio" id="q6a" name="q6" value="a">
+                    <label for="q6a">a) Su destreza con la espada.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q6b" name="q6" value="b">
+                    <label for="q6b">b) Que podían volar</label>
+                </div>
+                <div>
+                    <input type="radio" id="q6c" name="q6" value="c">
+                    <label for="q6c">c) Su conocimiento sobre el templo.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q6d" name="q6" value="d">
+                    <label for="q6d">d) Lo que habían aprendido en su viaje..</label>
+                </div>
+            </div>
+
+            <div class="question mt-3">
+                <p>7) ¿Qué acertijo les hizo el anciano sabio en el desierto?</p>
+                <div>
+                    <input type="radio" id="q7a" name="q7" value="a">
+                    <label for="q7a">a) "¿Qué es algo que nunca envejece?".</label>
+                </div>
+                <div>
+                    <input type="radio" id="q7b" name="q7" value="b">
+                    <label for="q7b">b) "¿Qué es algo que, aunque lo compartas, nunca se divide?".</label>
+                </div>
+                <div>
+                    <input type="radio" id="q7c" name="q7" value="c">
+                    <label for="q7c">c) "¿Qué es algo que siempre está en movimiento?".</label>
+                </div>
+                <div>
+                    <input type="radio" id="q7d" name="q7" value="d">
+                    <label for="q7d">d) "¿Qué es algo que se ve pero no se toca?".</label>
+                </div>
+            </div>
+
+            <div class="question mt-3">
+                <p>8) ¿Qué dijeron sobre el puente invisible en el castillo flotante?</p>
+                <div>
+                    <input type="radio" id="q8a" name="q8" value="a">
+                    <label for="q8a">a) "Solo los valientes pueden cruzarlo".</label>
+                </div>
+                <div>
+                    <input type="radio" id="q8b" name="q8" value="b">
+                    <label for="q8b">b) "Solo los rápidos podrán cruzarlo a tiempo".</label>
+                </div>
+                <div>
+                    <input type="radio" id="q8c" name="q8" value="c">
+                    <label for="q8c">c) "Solo aquellos que confían en su compañero cruzarán sin caer".</label>
+                </div>
+                <div>
+                    <input type="radio" id="q8d" name="q8" value="d">
+                    <label for="q8d">d) "Solo aquellos que sean fuertes podrán cruzar".</label>
+                </div>
+            </div>
+
+            <div class="question mt-3">
+                <p>9) ¿Cómo lograron que el reloj gigante dejara de moverse rápidamente?</p>
+                <div>
+                    <input type="radio" id="q9a" name="q9" value="a">
+                    <label for="q9a">a) Usaron un hechizo.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q9b" name="q9" value="b">
+                    <label for="q9b">b) Se concentraron en lo que habían aprendido en su viaje.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q9c" name="q9" value="c">
+                    <label for="q9c">c) Empujaron el reloj.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q9d" name="q9" value="d">
+                    <label for="q9d">d) Dijeron un conjuro mágico.</label>
+                </div>
+            </div>
+
+            <div class="question mt-3">
+                <p>10) ¿Qué sucedió después de que Lía tocó el cristal dorado?</p>
+                <div>
+                    <input type="radio" id="q10a" name="q10" value="a">
+                    <label for="q10a">a) La tierra comenzó a temblar.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q10b" name="q10" value="b">
+                    <label for="q10b">b)Una puerta mágica se abrió.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q10c" name="q10" value="c">
+                    <label for="q10c">c) Aparecieron más dragones.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q10d" name="q10" value="d">
+                    <label for="q10d">d) La estatua cobró vida.</label>
+                </div>
+            </div>
+        </div>
+            
+        <div class="feedback" id="feedback"></div>
+        
+        <button class="btn btn-warning mt-3" id="sendButton" onclick="evaluateCurrentQuestion()">Enviar Respuesta</button>
+        <button class="btn btn-success mt-3" id="retryButton" style="display: none;" onclick="resetQuiz()">Reintentar Cuestionario</button>
+    </div>
+
+    <footer class="bg-dark text-center py-3 mt-5" style="color: #FFA500;">
+        <p>&copy; 2024 Lectura Pro. Todos los derechos reservados.</p>
+    </footer>
+
+<script>
+    const correctAnswers = ['b', 'b', 'b', 'a', 'c', 'd', 'b', 'c', 'b', 'b']; // Respuestas correctas
+    let currentQuestionIndex = 0; // Controla qué pregunta está activa
+    let score = 0; // Puntaje actual
+
+    // Ocultar todas las preguntas excepto la primera al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+        const questionDivs = document.querySelectorAll('.question');
+        questionDivs.forEach((question, index) => {
+            question.style.display = index === currentQuestionIndex ? 'block' : 'none';
+        });
+    });
+
+    function evaluateCurrentQuestion() {
+        const questionDivs = document.querySelectorAll('.question');
+        const currentQuestion = questionDivs[currentQuestionIndex];
+
+        const selectedAnswer = currentQuestion.querySelector('input[type="radio"]:checked');
+        if (selectedAnswer) {
+            const userAnswer = selectedAnswer.value;
+            const feedback = document.getElementById('feedback');
+
+            if (userAnswer === correctAnswers[currentQuestionIndex]) {
+                score++;
+                feedback.innerHTML = '<p style="color: green;">¡Respuesta correcta!</p>';
+            } else {
+                feedback.innerHTML = '<p style="color: red;">Respuesta incorrecta. La respuesta correcta era: ' +
+                                     correctAnswers[currentQuestionIndex] +
+                                     '.</p>';
+            }
+
+            setTimeout(() => {
+                feedback.innerHTML = '';
+                currentQuestion.style.display = 'none';
+                currentQuestionIndex++;
+
+                if (currentQuestionIndex < questionDivs.length) {
+                    questionDivs[currentQuestionIndex].style.display = 'block';
+                } else {
+                    displayFinalResult();
+                }
+            }, 2000); // Cambia de pregunta después de 2 segundos
+        } else {
+            alert('Por favor, selecciona una respuesta.');
+        }
+    }
+
+    function displayFinalResult() {
+    const percentage = (score / correctAnswers.length) * 100;
+
+    if (percentage === 100) {
+        window.location.href = "{% url 'oro1' %}";
+    } else if (percentage >= 50) {
+        window.location.href = "{% url 'plata1' %}";
+    } else if (percentage > 0) {
+        window.location.href = "{% url 'bronce1' %}";
+    } else {
+        window.location.href = "{% url 'sinMedalla1' %}";
+    }
+}
+
+
+    function resetQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        document.getElementById('feedback').innerHTML = '';
+        document.getElementById('retryButton').style.display = 'none';
+        document.getElementById('sendButton').style.display = 'block';
+
+        const questionDivs = document.querySelectorAll('.question');
+        questionDivs.forEach((question, index) => {
+            question.style.display = index === 0 ? 'block' : 'none';
+        });
+    }
+</script>
+
+</body>
+</html>

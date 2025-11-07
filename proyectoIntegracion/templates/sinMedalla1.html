@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sigue Intentándolo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    body {
+        background-image: url("{% static 'imagenes/fondo.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding-top: 80px;
+        color: white;
+    }
+
+    .navbar {
+        background-color: black;
+        color: white;
+        padding: 1em 0;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        margin: 0 1em;
+        transition: color 0.3s;
+    }
+
+    .navbar a:hover {
+        color: #FFA500;
+    }
+
+    .container {
+        background: rgba(0, 0, 0, 0.85);
+        padding: 2em;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        max-width: 1200px;
+        margin: 3em auto;
+    }
+
+    p {
+        line-height: 1.6;
+    }
+
+    .btn-try-again {
+        font-size: 1em;
+        background-color: #ff4500; /* Rojo motivador */
+        color: black;
+        padding: 0.5em 1.5em;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .btn-try-again:hover {
+        background-color: #e63900;
+        box-shadow: 0 2px 10px rgba(255, 69, 0, 0.4);
+    }
+
+    .sad-image {
+        filter: grayscale(50%);
+        opacity: 0.9;
+    }
+</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Texto sin Drama</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'listaQuiz' %}">Ejercicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'listaQuiz' %}">Quizzes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
+                    
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'perfil' %}">Perfil</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Cerrar Sesión</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'ingresoUsuarios' %}">Registrarse</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="container_feedback" class="container mt-5 text-center">
+        <h1>¡No te rindas!</h1>
+        <p>No obtuviste ninguna medalla esta vez, pero ¡eso solo significa que puedes mejorar!</p>
+        
+        <h3 class="text-center mb-4">Retroalimentación</h3>
+        <div class="feedback-section text-start">
+            <p><strong>1. ¿Qué hicieron Lía y Tomás para salvarse de los murciélagos?</strong><br>
+                Respuesta correcta: B. Se agacharon para evitarlos.<br>
+                Explicación: Cuando los murciélagos volaron sobre ellos, Lía y Tomás optaron por agacharse para evitar cualquier daño.</p>
+            
+                <p><strong>2. ¿Qué pasó después de que Lía y Tomás salieron del otro extremo de la cueva?</strong><br>
+                Respuesta correcta: C. Encontraron un río que cruza a un templo.<br>
+                Explicación: Después de atravesar la cueva, Lía y Tomás descubrieron un río que fluía rápidamente y decidieron usar una rama como puente para cruzarlo hacia el templo.</p>
+            
+                <p><strong>3. ¿Qué era lo que había en la mano de la estatua?</strong><br>
+                Respuesta correcta: D. Un diamante.<br>
+                Explicación: Al llegar al templo iluminado, Lía y Tomás encontraron una estatua antigua que sostenía un diamante en su mano.</p>
+            
+                <p><strong>4. ¿Qué hicieron los hermanos al notar que el suelo temblaba?</strong><br>
+                Respuesta correcta: A. Intentaron salir rápidamente del templo.<br>
+                Explicación: Al sentir el temblor, Lía y Tomás actuaron rápidamente para escapar del templo antes de que se activara una trampa.</p>
+            
+                <p><strong>5. ¿Qué pasó después de que escaparon de la trampa del templo?</strong><br>
+                Respuesta correcta: B. Apareció el guardián nuevamente.<br>
+                Explicación: Tras evitar la trampa, el guardián apareció para felicitarlos por recuperar un objeto valioso, indicando que aún quedaban desafíos por delante.</p>
+            
+        </div>
+        
+        <p class="mt-4">¡Vuelve a intentarlo y demuestra lo que puedes lograr!</p>
+        <a href="{% url 'listaQuiz' %}" class="btn btn-try-again mt-4">Intentar de Nuevo</a>
+    </div>
+
+    <footer class="bg-dark text-center py-3 mt-5" style="color: #FFA500;">
+        <p>&copy; 2024 Lectura Pro. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
+

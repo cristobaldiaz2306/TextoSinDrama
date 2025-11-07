@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz 2</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+        body {
+            background-image: url("{% static 'imagenes/fondo.jpg' %}");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;
+            color: #FFA500; 
+            flex: 1; 
+        }
+
+        .navbar {
+            background-color: black; 
+            color: #FFA500; 
+            padding: 1em 0;
+        }
+
+        .navbar a {
+            color: #FFA500;
+            text-decoration: none;
+            margin: 0 1em;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: white;
+        }
+
+        #container_quiz {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            max-width: 1000px;
+            background-color: rgba(0, 0, 0, 0.85); 
+            border-radius: 10px; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); 
+            padding: 2em;
+            margin: 2em auto;
+            color: #FFA500;
+        }
+
+        .quiz-content {
+            font-size: 1.2em;
+            line-height: 1.6; 
+            margin-bottom: 2em;
+        }
+
+        .quiz-questions {
+            font-weight: bold;
+            background-color: #333;
+            padding: 1.5em;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+            max-width: 800px; 
+            margin: 0 auto;
+        }
+
+        .question {
+            margin-top: 1em;
+            padding-bottom: 1em; 
+            border-bottom: 1px solid #555; 
+        }
+
+        .question p {
+            font-size: 1.1em;
+            color: #FFA500;
+            font-weight: 600;
+            margin-bottom: 0.5em;
+            line-height: 1.4;
+        }
+
+        .question input[type="radio"] {
+            margin-right: 0.5em;
+            cursor: pointer;
+        }
+
+        .question label {
+            font-size: 1em;
+            display: flex; 
+            align-items: center;
+            padding: 0.5em;
+            cursor: pointer; 
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 5px; 
+            color: #FFA500;
+            background-color: #333;
+        }
+
+        .question input[type="radio"]:hover + label {
+            background-color: #555;
+        }
+
+        .question input[type="radio"]:checked + label {
+            background-color: #FFA500;
+            color: black;
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 2em;
+            padding: 1em;
+            border-radius: 8px;
+            font-size: 1.2em;
+        }
+
+        .feedback img {
+            margin-top: 1em;
+            width: 100px;
+        }
+
+
+        footer {
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            background-color: #000000;
+            color: #FFA500;
+            padding: 1em;
+        }
+
+        footer p {
+            margin: 0;
+            padding: 0.5em 0;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-questions {
+                padding: 1em;
+            }
+
+            .quiz-content,
+            .quiz-questions {
+                width: 100%; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Texto sin Drama</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'listaQuiz' %}">Ejercicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'listaQuiz' %}">Quizzes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
+                    
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'perfil' %}">Perfil</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Cerrar Sesión</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'ingresoUsuarios' %}">Registrarse</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="container_quiz" class="container mt-5">
+        <h5>Lee atentamente el texto y responde las preguntas</h5>
+        <p>Lía y Tomás se encuentran frente a un puente colgante viejo y frágil que cruza un acantilado. Sin perder tiempo, corren rápidamente mientras el puente se tambalea y las tablas caen tras ellos. Justo a tiempo, logran saltar al otro lado antes de que el puente colapse. <br><br></p> 
+        
+        <p>Al llegar, ven un bosque lleno de árboles altos y una densa niebla que dificulta la visión. Tras caminar un rato, se pierden, pero Tomás, siempre observador, encuentra un rastro de huellas en el suelo. Siguiendo esas huellas, logran continuar su camino. <br><br></p> 
+        
+        <p>Después de un largo recorrido, la niebla comienza a despejarse, y a lo lejos, ven una torre custodiada por un dragón dormido. Deciden acercarse con cuidado, pero Lía pisa una rama, despertando al dragón. Rápidamente, se esconden dentro de una armadura de caballero cercana. El dragón los busca, pero al no encontrarlos, vuelve a dormir. Aprovechando el momento, Lía y Tomás encuentran una salida secreta para escapar sin ser descubiertos. <br><br></p> 
+        
+        <p>Mientras intentan huir, Lía tropieza con una piedra y cae en un pozo profundo, llevando a Tomás con ella. Al fondo, descubren una caverna iluminada por extrañas luces y una puerta custodiada por una criatura telepática. La criatura les dice que solo podrán pasar si demuestran lo que han aprendido en su viaje. Lía y Tomás explican que han usado su ingenio, valentía y trabajo en equipo para superar los retos. Convencida, la criatura les permite continuar su aventura, revelando una puerta mágica<br><br></p>
+        <h5 style="color: #FFA500;">Preguntas:</h5>
+        <div class="quiz-questions mt-4">
+            <h7 style="color: #FFA500;"></h7>
+            <div class="question mt-3">
+                <p>6) ¿Qué hicieron Lía y Tomás para cruzar el puente?</p>
+                <div>
+                    <input type="radio" id="q6a" name="q6" value="a">
+                    <label for="q6a">a) Saltaron al río y nadaron al otro lado.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q6b" name="q6" value="b">
+                    <label for="q6b">b) Cruzaron rápidamente sin mirar hacia abajo.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q6c" name="q6" value="c">
+                    <label for="q6c">c) Usaron cuerdas para asegurar el puente antes de cruzarlo.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q6d" name="q6" value="d">
+                    <label for="q6d">d) Se dieron la vuelta y decidieron buscar otro camino.</label>
+                </div>
+            </div>
+            
+            <div class="question mt-3">
+                <p>7) ¿Qué decidieron hacer para encontrar su camino?</p>
+                <div>
+                    <input type="radio" id="q7a" name="q7" value="a">
+                    <label for="q7a">a) Subieron a un árbol alto para ver el panorama.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q7b" name="q7" value="b">
+                    <label for="q7b">b) Encendieron una fogata para atraer la atención de posibles viajeros.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q7c" name="q7" value="c">
+                    <label for="q7c">c) Siguieron un rastro de huellas que encontraron en el suelo.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q7d" name="q7" value="d">
+                    <label for="q7d">d) Decidieron descansar y esperar a que la niebla se disipara.</label>
+                </div>
+            </div>
+            
+            <div class="question mt-3">
+                <p>8) ¿Cómo decidieron enfrentarse al dragón?</p>
+                <div>
+                    <input type="radio" id="q8a" name="q8" value="a">
+                    <label for="q8a">a) Intentaron luchar contra él con sus espadas.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q8b" name="q8" value="b">
+                    <label for="q8b">b) Usaron una poción mágica que encontraron en el templo.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q8c" name="q8" value="c">
+                    <label for="q8c">c) Intentaron hablar con el dragón para negociar su paso.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q8d" name="q8" value="d">
+                    <label for="q8d">d) Se escondieron en la armadura de un caballero que se encontraba ahí.</label>
+                </div>
+            </div>
+            
+            <div class="question mt-3">
+                <p>9) ¿Qué hicieron después de caer?"</p>
+                <div>
+                    <input type="radio" id="q9a" name="q9" value="a">
+                    <label for="q9a">a) Intentaron escalar las paredes del pozo para salir.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q9b" name="q9" value="b">
+                    <label for="q9b">b) Decidieron explorar la caverna para ver qué había dentro.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q9c" name="q9" value="c">
+                    <label for="q9c">c) Llamaron al dragón para que los rescatara.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q9d" name="q9" value="d">
+                    <label for="q9d">d) Comenzaron a gritar pidiendo ayuda a cualquier persona.</label>
+                </div>
+            </div>
+            
+            <div class="question mt-3">
+                <p>10) ¿Qué hicieron para demostrar que estaban listos para continuar?</p>
+                <div>
+                    <input type="radio" id="q10a" name="q10" value="a">
+                    <label for="q10a">a) Le contaron todas las lecciones que habían aprendido en el camino.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q10b" name="q10" value="b">
+                    <label for="q10b">b) Le entregaron el diamante que habían encontrado en el templo.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q10c" name="q10" value="c">
+                    <label for="q10c">c) Usaron magia para demostrar su poder.</label>
+                </div>
+                <div>
+                    <input type="radio" id="q10d" name="q10" value="d">
+                    <label for="q10d">d) Decidieron regresar y no seguir más en su viaje.</label>
+                </div>
+            </div>
+        </div>
+           
+        <div class="feedback" id="feedback"></div>
+        
+        <button class="btn btn-warning mt-3" id="sendButton" onclick="evaluateCurrentQuestion()">Enviar Respuesta</button>
+        <button class="btn btn-success mt-3" id="retryButton" style="display: none;" onclick="resetQuiz()">Reintentar Cuestionario</button>
+    </div>
+
+    <footer class="bg-dark text-center py-3 mt-5" style="color: #FFA500;">
+        <p>&copy; 2024 Lectura Pro. Todos los derechos reservados.</p>
+    </footer>
+
+<script>
+    const correctAnswers = ['b', 'c', 'd', 'b', 'a']; // Respuestas correctas
+    let currentQuestionIndex = 0; // Controla qué pregunta está activa
+    let score = 0; // Puntaje actual
+
+    // Ocultar todas las preguntas excepto la primera al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+        const questionDivs = document.querySelectorAll('.question');
+        questionDivs.forEach((question, index) => {
+            question.style.display = index === currentQuestionIndex ? 'block' : 'none';
+        });
+    });
+
+    function evaluateCurrentQuestion() {
+        const questionDivs = document.querySelectorAll('.question');
+        const currentQuestion = questionDivs[currentQuestionIndex];
+
+        const selectedAnswer = currentQuestion.querySelector('input[type="radio"]:checked');
+        if (selectedAnswer) {
+            const userAnswer = selectedAnswer.value;
+            const feedback = document.getElementById('feedback');
+
+            if (userAnswer === correctAnswers[currentQuestionIndex]) {
+                score++;
+                feedback.innerHTML = '<p style="color: green;">¡Respuesta correcta!</p>';
+            } else {
+                feedback.innerHTML = '<p style="color: red;">Respuesta incorrecta. La respuesta correcta era: ' +
+                                     correctAnswers[currentQuestionIndex] +
+                                     '.</p>';
+            }
+
+            setTimeout(() => {
+                feedback.innerHTML = '';
+                currentQuestion.style.display = 'none';
+                currentQuestionIndex++;
+
+                if (currentQuestionIndex < questionDivs.length) {
+                    questionDivs[currentQuestionIndex].style.display = 'block';
+                } else {
+                    displayFinalResult();
+                }
+            }, 2000); // Cambia de pregunta después de 2 segundos
+        } else {
+            alert('Por favor, selecciona una respuesta.');
+        }
+    }
+
+    function displayFinalResult() {
+    const percentage = (score / correctAnswers.length) * 100;
+
+    if (percentage === 100) {
+        window.location.href = "{% url 'oro1' %}";
+    } else if (percentage >= 50) {
+        window.location.href = "{% url 'plata1' %}";
+    } else if (percentage > 0) {
+        window.location.href = "{% url 'bronce1' %}";
+    } else {
+        window.location.href = "{% url 'sinMedalla1' %}";
+    }
+}
+
+
+    function resetQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        document.getElementById('feedback').innerHTML = '';
+        document.getElementById('retryButton').style.display = 'none';
+        document.getElementById('sendButton').style.display = 'block';
+
+        const questionDivs = document.querySelectorAll('.question');
+        questionDivs.forEach((question, index) => {
+            question.style.display = index === 0 ? 'block' : 'none';
+        });
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
