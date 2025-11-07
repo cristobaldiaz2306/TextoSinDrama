@@ -16,8 +16,7 @@ Permite a los usuarios leer fragmentos de texto, escuchar narraciones y responde
 [Inicio de Sesión](https://github.com/user-attachments/assets/6b13bbbc-4adb-46b7-ac06-4eae2008d186)
 [Registro de Usuario](https://github.com/user-attachments/assets/afd4096a-d1b0-4dbd-be9d-f2ecbe8d4917)
 [Preguntas de Quiz](https://github.com/user-attachments/assets/f80ad52a-7049-4a17-8a88-5711b93d116b)
-[Sistema de Gamificación](https://github.com/user-attachments/assets/d7dc566b-d832-42ee-b9e5-3f3caa408160)
-
+[Sistema de Gamificación](https://github.com/user-attachments/assets/83c743fc-a6bb-47d7-b32d-1d91856b217d)
 
 
 ### 🧩 Enlace al proyecto
